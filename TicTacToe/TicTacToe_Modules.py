@@ -1,42 +1,17 @@
-def CheckWin(Token,Grid):
-    Winner = False
-    WinningToken = None
-    for i in range(0,3):
-        #Winner by row
-        if all(Grid[i,:] == Token):
-            Winner = True
-            WinningToken = Token
-            return Winner, WinningToken
-            break
-        #Winner by column
-        elif all(Grid[:,i] == Token):
-            Winner = True
-            WinningToken = Token
-            return Winner, WinningToken
-            break
-        else:
-            Winner = False
-            
-    Diagonal1 =[(0,0),(1,1),(2,2)]
-    Diagonal2 = [(2,0),(1,1),(0,2)]
-    
-    if Winner == False:
-        if Grid[0,0] == Token and Grid[1,1] == Token and Grid[2,2] == Token:
-            Winner = True
-            WinningToken = Token
-            return Winner, WinningToken
-        else:
-            Winner = False
+import numpy as np
         
-        if Grid[2,0] == Token and Grid[1,1] == Token and Grid[0,2] == Token:
-            Winner = True
-            WinningToken = Token
-            return Winner, WinningToken
-        else:
-            Winner = False
-    else:
-        Winner = False
-    
-    return Winner,WinningToken
-        
+def CheckWin(Grid,Token):
+    #Checks for whether columns or rows are completly X or O
+    for i in range(3):
+        if np.all(Grid[i, :] == Token) or np.all(Grid[:, i] == Token):
+            return True
+    #Checks for whether diagonals are completely X or O
+    if all(np.diag(Grid) == Token) or all(np.diag(np.fliplr(Grid))):
+        return True
+    return False
+
+def PlaceToken(Grid,Token,x,y):
+    Grid[int(x),int(y)] = Token
+    Winner = CheckWin(Grid,Token)
+    return Winner,Grid
     
